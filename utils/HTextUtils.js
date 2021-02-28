@@ -1,3 +1,5 @@
+import {StyleSheet} from "react-native";
+
 const getFontSize = (props) => {
   const fontSizes = {
     map: {
@@ -58,4 +60,16 @@ const getSpacing = (props) => {
   return props.spacing ?? 15
 }
 
-export { getFontSize, getTextAlignment, getSpacing, getFontFamily }
+const loadStyleSheet = (props) => {
+  return StyleSheet.create({
+    text: {
+      fontSize: getFontSize(props),
+      fontFamily: getFontFamily(props),
+      textAlign: getTextAlignment(props),
+      marginBottom: getSpacing(props),
+      lineHeight: 33
+    }
+  })
+}
+
+export { loadStyleSheet }

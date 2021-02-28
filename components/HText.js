@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import { Text, View } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import {
   useFonts,
@@ -9,23 +9,10 @@ import {
   Nunito_700Bold
 } from '@expo-google-fonts/nunito';
 
-import {
-  getFontSize,
-  getFontFamily,
-  getTextAlignment,
-  getSpacing
-} from '~/utils/HTextUtils.js'
+import { loadStyleSheet } from '~/utils/HTextUtils.js'
 
 export default props => {
-  const styles = StyleSheet.create({
-    text: {
-      fontSize: getFontSize(props),
-      fontFamily: getFontFamily(props),
-      textAlign: getTextAlignment(props),
-      marginBottom: getSpacing(props),
-      lineHeight: 33
-    }
-  })
+  const styles = loadStyleSheet(props);
 
   let [fontsLoaded] = useFonts({
     Nunito_600SemiBold,
