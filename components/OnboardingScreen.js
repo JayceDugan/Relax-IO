@@ -1,5 +1,6 @@
 import React from 'react'
-import {StyleSheet, View, Text, Image} from 'react-native';
+import { StyleSheet, View, Text, Image, Animated } from 'react-native';
+
 import HText from "./HText";
 import PText from "./PText";
 import OnboardingButton from "./OnboardingButton";
@@ -36,22 +37,71 @@ const styles = StyleSheet.create({
 });
 
 export default class OnboardingScreen extends React.Component {
-  constructor(props) {
-    super(props)
+  state = {
+    opacity: new Animated.Value(0)
   }
 
+  componentDidMount() {
+    Animated.timing(this.state.opacity, {
+      duration: 300,
+      toValue: 1
+    }).start()
+  }
+
+  componentDidUpdate() {
+     Animated.sequence([
+        Animated.timing(this.state.opacity,
+          {
+            toValue: 0,
+            duration: 300
+          }
+        ),
+         Animated.timing(this.state.opacity,
+         {
+           toValue: 1,
+           duration: 300
+         }
+       )
+     ]).start()
+  }
+
+  componentWillUnmount() {
+    Animated.timing(this.state.opacity, {
+      duration: 300,
+      toValue: 0
+    }).start()
+  }
+
+  // useEffect(() => {
+  //  }, [fadeAnim])
+
   render() {
-    return(
-      <View style={styles.container}>
-        <Image source={require("../assets/couple-illustration.png")} style={styles.illustration}/>
+    return (
+      <Animated.View
+        style={{
+          ...styles.container,
+          opacity: this.state.opacity,
+          transform: [{
+            translateX: this.state.opacity.interpolate({
+              inputRange: [0, 1],
+              outputRange: [-150, 0]
+            })
+          }]
+        }}
+      >
+        <Animated.Image
+          onLoad={}
+          source={this.props.illustration}
+          style={styles.illustration}
+        />
         <View style={styles.contentWrapper}>
-          <HText size="h1" weight="bold" align="center" spacing={15}>Reduce Stress</HText>
-          <PText size="medium" align="center" spacing={0}>We are here to help you get rid of the stress you might have.</PText>
+          <HText size="h1" weight="bold" align="center" spacing={15}>{ this.props.headline }</HText>
+          <PText size="medium" align="center" spacing={0}>{ this.props.description }</PText>
           <View style={styles.nextWrapper}>
-            <OnboardingButton />
+            <OnboardingButton next={this.props.next} />
           </View>
         </View>
-      </View>
+      </Animated.View>
     )
   }
 }
